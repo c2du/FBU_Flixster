@@ -2,33 +2,67 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivPosterImage"
-        android:layout_width="90dp"
-        android:layout_height="135dp"
-        android:layout_alignParentStart="true"
+        android:layout_width="135dp"
+        android:layout_height="202dp"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         app:srcCompat="@android:color/black" />
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="294dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/ivPosterImage"
-        android:text="Movie Title"
-        android:textAppearance="@android:style/TextAppearance.Large" />
+        android:textStyle="bold"
+        android:layout_alignEnd="@id/ivPosterImage"
+        android:layout_alignStart="@id/ivPosterImage"
+        android:layout_below="@+id/ivPosterImage"
+        android:text="@string/movie_title"
+        android:layout_marginBottom="5dp"
+        android:textSize="15dp"
+        style="@style/MainMovieTextTheme" />
 
-        <TextView
-            android:id="@+id/tvOverview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvTitle"
-            android:layout_toEndOf="@+id/ivPosterImage"
-            android:layout_toRightOf="@+id/ivPosterImage"
-            android:scrollbars="vertical"
-            android:text="Movie overview and synopsis" />
+    <TextView
+        android:id="@+id/tvPopularity"
+        android:layout_alignStart="@id/ivPosterImage"
+        android:layout_alignEnd="@id/ivPosterImage"
+        android:layout_below="@+id/tvTitle"
+        android:text="@string/popularity"
+        style="@style/MainMovieTextTheme"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="@style/Base.Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/ivPosterImage"
+        android:layout_below="@+id/tvPopularity"
+        android:numStars="5"
+        android:rating="0"
+        android:stepSize="0.1" />
+
+    <TextView
+        android:id="@+id/tvReleaseDate"
+        android:layout_alignStart="@id/ivPosterImage"
+        android:layout_alignEnd="@id/ivPosterImage"
+        android:layout_below="@+id/ratingBar"
+        android:text="@string/release_date"
+        style="@style/MainMovieTextTheme"/>
+
+    <TextView
+        android:id="@+id/tvOverview"
+        android:layout_alignStart="@id/ivPosterImage"
+        android:layout_alignEnd="@id/ivPosterImage"
+        android:layout_below="@+id/tvReleaseDate"
+        android:scrollbars="vertical"
+        android:text="@string/movie_overview_and_synopsis"
+        android:maxLines="3"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textStyle="italic"
+        style="@style/MainMovieTextTheme"/>
+
 </RelativeLayout>

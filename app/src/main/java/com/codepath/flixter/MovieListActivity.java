@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.codepath.flixter.models.Config;
@@ -18,10 +22,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MovieListActivity extends AppCompatActivity {
+public class MovieListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     //constants
     // the base URL for the API
@@ -41,6 +47,8 @@ public class MovieListActivity extends AppCompatActivity {
     MovieAdapter adapter;
     // image config
     Config config;
+    // the spinner for choices to sort movie list
+    Spinner choices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +60,20 @@ public class MovieListActivity extends AppCompatActivity {
         movies = new ArrayList<>();
         // initialize the adapter -- movies array cannot be reinitialized after this point
         adapter = new MovieAdapter(movies);
+        // setup sort by spinner called choices
+        choices = (Spinner) findViewById(R.id.sort_by);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> spinneradapter = ArrayAdapter.createFromResource(this, R.array.sortby_array, R.layout.spinner_item);
+        // Specify the layout to use when the list of choices appears
+        spinneradapter.setDropDownViewResource(R.layout.spinner_item);
+        // Apply the adapter to the spinner
+        choices.setAdapter(spinneradapter);
+        choices.setOnItemSelectedListener(this);
 
         // resolve the recycler view and connect a layout manager and the adapter
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvMovies = (RecyclerView) findViewById(R.id.rvMovies);
-        rvMovies.setLayoutManager(new LinearLayoutManager(this));
+        rvMovies.setLayoutManager(layoutManager);
         rvMovies.setAdapter(adapter);
 
         // get the configuration on app creation
@@ -80,9 +98,17 @@ public class MovieListActivity extends AppCompatActivity {
                     for (int i = 0; i < results.length(); i++) {
                         Movie movie = new Movie(results.getJSONObject(i));
                         movies.add(movie);
+                        Log.i(TAG, movie.toString());
                         // notify adapter that a row was added
                         adapter.notifyItemInserted(movies.size() - 1);
                     }
+
+                    Collections.sort(movies, new Comparator<Movie>() {
+                        @Override
+                        public int compare(Movie o1, Movie o2) {
+                            return Float.compare(o2.getVoteAverage(), o1.getVoteAverage());
+                        }
+                    });
                     Log.i(TAG, String.format("Loaded %s movies", results.length()));
                 } catch (JSONException e) {
                     logError("Failed to parse now_playing movies", e, true);
@@ -139,5 +165,43 @@ public class MovieListActivity extends AppCompatActivity {
             // show a long toast with the error message
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String res = (String) parent.getItemAtPosition(position);
+        if (res.equals("Popularity")) {
+            Collections.sort(movies, new Comparator<Movie>() {
+                @Override
+                public int compare(Movie o1, Movie o2) {
+                    return o2.getPopularity().compareTo(o1.getPopularity());
+                }
+            });
+            adapter.notifyDataSetChanged();
+        }
+        if (res.equals("Release Date")) {
+            Collections.sort(movies, new Comparator<Movie>() {
+                @Override
+                public int compare(Movie o1, Movie o2) {
+                    return o2.getReleaseDate().compareTo(o1.getReleaseDate());
+                }
+            });
+            adapter.notifyDataSetChanged();
+        }
+        if (res.equals("Rating")) {
+            Collections.sort(movies, new Comparator<Movie>() {
+                @Override
+                public int compare(Movie o1, Movie o2) {
+                    return Float.compare(o2.getVoteAverage(), o1.getVoteAverage());
+                }
+            });
+            adapter.notifyDataSetChanged();
+        }
+        Log.i(TAG, res);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

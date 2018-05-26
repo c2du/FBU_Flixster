@@ -1,12 +1,15 @@
 package com.codepath.flixter;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -57,17 +60,36 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // populate the view with the movie data
         holder.tvTitle.setText(movie.getTitle());
         holder.tvOverview.setText(movie.getOverview());
+        String popularity = Double.toString(movie.getPopularity());
+        holder.tvPopularity.setText(popularity);
+        float rating = movie.getVoteAverage();
+        holder.ratingBar.setRating(rating/2);
+        holder.tvReleaseDate.setText(movie.getReleaseDate());
+
+        // determine the current orientation
+        boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
         // build url for poster image
-        String imageUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+        String imageUrl = null;
+
+        // if in portrait mode, load the poster image
+        if (isPortrait) {
+            imageUrl = config.getImageUrl(config.getPosterSize(), movie.getPosterPath());
+        } else {
+            imageUrl = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
+        }
+
+        // get the correct placeholder and imageview for the current orientation
+        int placeholderId = isPortrait ? R.drawable.flicks_movie_placeholder : R.drawable.flicks_backdrop_placeholder;
+        ImageView imageView = isPortrait ? holder.ivPosterImage : holder.ivBackdropImage;
 
         // load image using glide
         Glide.with(context)
                 .load(imageUrl)
                 .bitmapTransform(new RoundedCornersTransformation(context, 15, 0))
-                .placeholder(R.drawable.flicks_movie_placeholder)
-                .error(R.drawable.flicks_movie_placeholder)
-                .into(holder.ivPosterImage);
+                .placeholder(placeholderId)
+                .error(placeholderId)
+                .into(imageView);
     }
 
     // returns the total number of items in the list
@@ -81,15 +103,24 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         // track view objects
         ImageView ivPosterImage;
+        ImageView ivBackdropImage;
         TextView tvTitle;
         TextView tvOverview;
+        TextView tvPopularity;
+        RatingBar ratingBar;
+        TextView tvReleaseDate;
 
         public ViewHolder(View itemView) {
             super(itemView);
             // lookup view objects by id
             ivPosterImage = (ImageView) itemView.findViewById(R.id.ivPosterImage);
+            ivBackdropImage = (ImageView) itemView.findViewById(R.id.ivBackdropImage);
             tvOverview = (TextView) itemView.findViewById(R.id.tvOverview);
+            tvOverview.setMovementMethod(new ScrollingMovementMethod());
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+            tvPopularity = (TextView) itemView.findViewById(R.id.tvPopularity);
+            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
+            tvReleaseDate = (TextView) itemView.findViewById(R.id.tvReleaseDate);
         }
     }
 }

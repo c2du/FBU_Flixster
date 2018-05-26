@@ -9,16 +9,36 @@ public class Movie {
     private String title;
     private String overview;
     private String posterPath; // only the path, not full URL
+    private String backdropPath;
+    private float voteAverage;
+    private Double popularity;
+    private String releaseDate;
 
     // initialize from JSON data
     public Movie(JSONObject object) throws JSONException {
         title = object.getString("title");
         overview = object.getString("overview");
         posterPath = object.getString("poster_path");
+        backdropPath = object.getString("backdrop_path");
+        voteAverage = object.getLong("vote_average");
+        popularity = object.getDouble("popularity");
+        releaseDate = object.getString("release_date");
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public float getVoteAverage() {
+        return voteAverage;
+    }
+
+    public Double getPopularity() {
+        return popularity;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
     public String getOverview() {
@@ -27,5 +47,9 @@ public class Movie {
 
     public String getPosterPath() {
         return posterPath;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
     }
 }
