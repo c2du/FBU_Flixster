@@ -49,6 +49,7 @@ public class MovieListActivity extends AppCompatActivity implements AdapterView.
     Config config;
     // the spinner for choices to sort movie list
     Spinner choices;
+    LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class MovieListActivity extends AppCompatActivity implements AdapterView.
         choices.setOnItemSelectedListener(this);
 
         // resolve the recycler view and connect a layout manager and the adapter
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvMovies = (RecyclerView) findViewById(R.id.rvMovies);
         rvMovies.setLayoutManager(layoutManager);
         rvMovies.setAdapter(adapter);

@@ -60,7 +60,7 @@
         android:layout_below="@+id/tvReleaseDate"
         android:scrollbars="vertical"
         android:text="@string/movie_overview_and_synopsis"
-        android:maxLines="3"
+        android:maxLines="8"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textStyle="italic"
         style="@style/MainMovieTextTheme"/>

@@ -25,11 +25,41 @@
         android:textAppearance="@android:style/TextAppearance.Medium" />
 
     <TextView
+        android:id="@+id/tvPopularity"
+        android:layout_alignStart="@id/tvTitle"
+        android:layout_alignEnd="@id/tvTitle"
+        android:layout_below="@+id/tvTitle"
+        android:layout_toRightOf="@id/ivBackdropImage"
+        android:text="@string/popularity"
+        style="@style/MainMovieTextTheme"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="@style/Base.Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/tvTitle"
+        android:layout_toRightOf="@id/ivBackdropImage"
+        android:layout_below="@+id/tvPopularity"
+        android:numStars="5"
+        android:rating="0"
+        android:stepSize="0.1" />
+
+    <TextView
+        android:id="@+id/tvReleaseDate"
+        android:layout_alignStart="@id/tvTitle"
+        android:layout_alignEnd="@id/tvTitle"
+        android:layout_below="@+id/ratingBar"
+        android:layout_toRightOf="@id/ivBackdropImage"
+        android:text="@string/release_date"
+        style="@style/MainMovieTextTheme"/>
+
+    <TextView
         android:id="@+id/tvOverview"
         android:layout_width="243dp"
-        android:layout_height="162dp"
-        android:layout_below="@+id/tvTitle"
+        android:layout_height="108dp"
+        android:layout_below="@+id/tvReleaseDate"
         android:layout_toEndOf="@+id/ivBackdropImage"
-        android:text="TextView"
-        android:scrollbars = "vertical" />
+        android:scrollbars="vertical"
+        android:text="TextView" />
 </RelativeLayout>
